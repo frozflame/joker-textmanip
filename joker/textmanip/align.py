@@ -5,34 +5,11 @@ from __future__ import division, print_function
 import os
 import re
 from collections import defaultdict
+from joker.cast import numerify
 
 """
 textmanip: text manipulation functions
 """
-
-
-def _regular_cast(original, *attempts):
-    # TODO: remove this func -> joker.cast
-    for attem in attempts:
-        if not callable(attem):
-            return attem
-        try:
-            return attem(original)
-        except (TypeError, ValueError):
-            pass
-    return original
-
-
-def _numerify(s):
-    return _regular_cast(s, int, float)
-
-
-def keep_file_extension(old_path, new_path):
-    _, old_ext = os.path.splitext(old_path)
-    p, new_ext = os.path.splitext(new_path)
-    if old_ext.lower() == new_ext.lower():
-        return new_path
-    return os.path.join(p, old_ext)
 
 
 def _deep_strip(s):
@@ -130,7 +107,7 @@ def tabular_format(rows):
     for row in rows:
         rowcount += 1
         for ic, cell in enumerate(row):
-            cell = _numerify(str(cell))
+            cell = numerify(str(cell))
             columns[ic].append(cell)
             columntypes[ic].add(type(cell))
 
@@ -157,24 +134,4 @@ def tabular_format(rows):
         rows.append(row)
     return rows
 
-
-def human_filesize(number):
-    """
-    Human readable file size unit
-    :param number: how many bytes
-    :return: (num, unit)
-    """
-    units = ["bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-    for unit in units:
-        if number < 10000 or unit == "YB":
-            return number, unit
-        else:
-            number = number / 1024.0
-            # to next loop, no return!
-
-
-def url_to_filename(url):
-    # http://stackoverflow.com/questions/295135/
-    name = re.sub(r'[^\w\s-_.]+', '-', url)
-    return re.sub(r'^{http|https|ftp}', '', name)
 
