@@ -2,9 +2,9 @@
 # coding: utf-8
 from __future__ import division, print_function
 
-import os
 import re
 from collections import defaultdict
+
 from joker.cast import numerify
 
 """
