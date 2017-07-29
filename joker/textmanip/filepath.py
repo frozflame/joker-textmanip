@@ -5,6 +5,7 @@ from __future__ import division, print_function
 
 import os
 import re
+import sys
 
 
 def keep_file_extension(old_path, new_path):
@@ -15,23 +16,21 @@ def keep_file_extension(old_path, new_path):
     return os.path.join(p, old_ext)
 
 
-def human_filesize(number):
-    """
-    Human readable file size unit
-    :param number: how many bytes
-    :return: (num, unit)
-    """
-    units = ["bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-    for unit in units:
-        if number < 10000 or unit == "YB":
-            return number, unit
-        else:
-            number = number / 1024.0
-            # to next loop, no return!
-
-
 def url_to_filename(url):
     # http://stackoverflow.com/questions/295135/
     name = re.sub(r'[^\w\s-_.]+', '-', url)
     return re.sub(r'^{http|https|ftp}', '', name)
+
+
+def under_home_dir(*paths):
+    if sys.platform == 'win32':
+        homedir = os.environ["HOMEPATH"]
+    else:
+        homedir = os.path.expanduser('~')
+    return os.path.join(homedir, *paths)
+
+
+def under_package_dir(package, *paths):
+    p_dir = os.path.dirname(package.__file__)
+    return os.path.join(p_dir, *paths)
 
