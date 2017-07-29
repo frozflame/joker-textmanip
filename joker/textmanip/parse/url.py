@@ -13,6 +13,32 @@ from six import moves as six_moves
 urllib = six_moves.urllib
 
 
+def validate_ipv4_address(address):
+    import socket
+    # http://stackoverflow.com/a/4017219/2925169
+    try:
+        socket.inet_pton(socket.AF_INET, address)
+    except AttributeError:  # no inet_pton here, sorry
+        try:
+            socket.inet_aton(address)
+        except socket.error:
+            return False
+        return address.count('.') == 3
+    except socket.error:  # not a valid address
+        return False
+    return True
+
+
+def validate_ipv6_address(address):
+    import socket
+    # http://stackoverflow.com/a/4017219/2925169
+    try:
+        socket.inet_pton(socket.AF_INET6, address)
+    except socket.error:  # not a valid address
+        return False
+    return True
+
+
 class URLMutable(object):
     def __init__(self, url):
         p = urllib.parse.urlparse(url)
