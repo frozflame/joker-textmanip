@@ -1,6 +1,6 @@
 Joker-Textmanip
 -------------
 
-Text manipulation functions.
+Text parsing and formatting.
 
 
