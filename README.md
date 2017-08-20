@@ -1,5 +1,5 @@
-Joker-Textmanip
--------------
+joker-textmanip
+===============
 
 Text parsing and formatting.
 
