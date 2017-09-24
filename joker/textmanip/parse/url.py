@@ -99,10 +99,14 @@ def url_simplify(url, queries=('id',)):
     return str(mut)
 
 
-if __name__ == '__main__':
+def test_url_simplify():
     import sys
     if sys.argv[1:]:
         s = sys.argv[1]
     else:
         s = 'https://www.example.com/a/bc?id=920&from=index#detail'
     print(url_simplify(sys.argv[1]))
+
+
+if __name__ == '__main__':
+    test_url_simplify()
