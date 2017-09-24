@@ -97,3 +97,12 @@ def url_simplify(url, queries=('id',)):
     mut.query = {k: v for k, v in mut.query.items() if k in queries}
     mut['fragment'] = ''
     return str(mut)
+
+
+if __name__ == '__main__':
+    import sys
+    if sys.argv[1:]:
+        s = sys.argv[1]
+    else:
+        s = 'https://www.example.com/a/bc?id=920&from=index#detail'
+    print(url_simplify(sys.argv[1]))
