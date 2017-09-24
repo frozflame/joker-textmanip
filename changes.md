@@ -1,6 +1,9 @@
 Changes of joker-textmanip
 ==========================
 
+#### 0.0.4
+* add function url_simplify
+
 #### 0.0.3
 * remove .filepath
 * remove .parse.url.validate_ipv?_address
