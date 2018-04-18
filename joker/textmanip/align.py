@@ -135,3 +135,18 @@ def tabular_format(rows):
     return rows
 
 
+def find_common_prefix(lines):
+    if not isinstance(lines, list):
+        lines = list(lines)
+    characters = []
+    for column in zip(*lines):
+        column = set(column)
+        if len(column) > 1:
+            break
+        characters.append(list(column)[0])
+    return ''.join(characters)
+
+
+def find_common_suffix(lines):
+    lines = [x[::-1] for x in lines]
+    return find_common_prefix(lines)[::-1]

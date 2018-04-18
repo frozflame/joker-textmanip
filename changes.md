@@ -1,6 +1,9 @@
 Changes of joker-textmanip
 ==========================
 
+#### 0.0.5
+* add functions find_common_prefix, find_common_suffix
+
 #### 0.0.4
 * add function url_simplify
 
