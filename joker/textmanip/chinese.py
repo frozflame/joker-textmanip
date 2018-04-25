@@ -34,6 +34,7 @@ def i2ch_lt10k(num, digits, units):
 
 
 def i2chsi(num, digits, units):
+    num = int(num)
     if num < 10:
         return digits[num]
     if num == 10:
