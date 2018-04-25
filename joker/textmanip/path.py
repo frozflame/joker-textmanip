@@ -13,14 +13,18 @@ def url_to_filename(url):
     return re.sub(r'^{http|https|ftp}', '', name)
 
 
-def keep_extension(old_path, new_path):
-    _, old_ext = os.path.splitext(old_path)
-    p, new_ext = os.path.splitext(new_path)
-    if old_ext.lower() == new_ext.lower():
-        return new_path
-    return os.path.join(p, old_ext)
+def smart_extension_join(path, ext):
+    """
+    >>> smart_extension_join('~/html/index.txt', 'html')
+    '~/html/index.html'
+    >>> smart_extension_join('~/html/index.txt', '.html')
+    '~/html/index.txt.html'
 
-
-def replace_extension(path, ext):
+    :param path: (str)
+    :param ext: (str)
+    :return:
+    """
+    if ext.startswith('.'):
+        return path + ext
     p, _ = os.path.splitext(path)
-    return os.path.join(p, ext)
+    return p + '.' + ext
