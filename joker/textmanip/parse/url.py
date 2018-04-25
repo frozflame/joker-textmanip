@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-from __future__ import division, print_function
+from __future__ import unicode_literals
 
 import base64
 import collections
 
+import joker.textmanip.path
 from joker.cast import namedtuple_to_dict
 from six import moves as six_moves
 
-
 urllib = six_moves.urllib
+
+url_to_filename = joker.textmanip.path.url_to_filename
 
 
 class URLMutable(object):
