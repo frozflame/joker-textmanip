@@ -19,5 +19,3 @@ def random_string(length, chars=None):
         chars = digits + ascii_letters
     return ''.join(random.choice(chars) for _ in range(length))
 
-
-# https://unicode-table.com/en/blocks/cjk-unified-ideographs/
