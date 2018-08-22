@@ -13,7 +13,7 @@ def url_to_filename(url):
     return re.sub(r'^{http|https|ftp}', '', name)
 
 
-def smart_extension_join(path, ext):
+def ext_join(path, ext):
     """
     >>> smart_extension_join('~/html/index.txt', 'html')
     '~/html/index.html'
@@ -24,7 +24,10 @@ def smart_extension_join(path, ext):
     :param ext: (str)
     :return:
     """
-    if ext.startswith('.'):
+    if ext.startswith(os.path.extsep):
         return path + ext
     p, _ = os.path.splitext(path)
-    return p + '.' + ext
+    return p + os.path.extsep + ext
+
+
+smart_extension_join = ext_join
