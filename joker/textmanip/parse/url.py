@@ -6,11 +6,10 @@ from __future__ import unicode_literals
 import base64
 import collections
 
-import joker.textmanip.path
 from joker.cast import namedtuple_to_dict
-from six import moves as six_moves
+from six.moves import urllib
 
-urllib = six_moves.urllib
+import joker.textmanip.path
 
 url_to_filename = joker.textmanip.path.url_to_filename
 
@@ -107,7 +106,7 @@ def test_url_simplify():
         s = sys.argv[1]
     else:
         s = 'https://www.example.com/a/bc?id=920&from=index#detail'
-    print(url_simplify(sys.argv[1]))
+    print(url_simplify(s))
 
 
 if __name__ == '__main__':
