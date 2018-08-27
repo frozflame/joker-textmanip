@@ -8,10 +8,6 @@ from os.path import commonprefix
 
 from joker.cast import numerify
 
-"""
-textmanip: text manipulation functions
-"""
-
 
 def _deep_strip(s):
     s = s.replace('\r', '')
