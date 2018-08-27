@@ -15,9 +15,9 @@ def url_to_filename(url):
 
 def ext_join(path, ext):
     """
-    >>> smart_extension_join('~/html/index.txt', 'html')
+    >>> ext_join('~/html/index.txt', 'html')
     '~/html/index.html'
-    >>> smart_extension_join('~/html/index.txt', '.html')
+    >>> ext_join('~/html/index.txt', '.html')
     '~/html/index.txt.html'
 
     :param path: (str)
@@ -31,3 +31,35 @@ def ext_join(path, ext):
 
 
 smart_extension_join = ext_join
+
+
+def unix_filename_safe(s):
+    # ASCII 47: "/"
+    return s.translate(dict.fromkeys([0, 47]))
+
+
+windows_reserved_names = {
+    'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4',
+    'COM5', 'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2',
+    'LPT3', 'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9',
+}
+
+
+def windows_filename_safe(s):
+    # <>:"/\\|?* and ASCII 0 - 31
+    # https://stackoverflow.com/a/31976060/2925169
+    ordinals = [ord(c) for c in '<>:"/\\|?*']
+    ordinals.extend(range(32))
+    s = s.translate(dict.fromkeys(ordinals))
+    if s.endswith(' ') or s.endswith('.'):
+        s = s[:-1]
+    if s.upper() in windows_reserved_names:
+        s += '_'
+    return s
+
+
+def proper_filename(s):
+    s = windows_filename_safe(s.strip())
+    s = re.sub(r'^[.-]', '', s)
+    s = re.sub(r"['\s]+", '_', s)
+    return s
