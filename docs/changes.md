@@ -1,6 +1,11 @@
 Changes of joker-textmanip
 ==========================
 
+#### 0.0.6
+* move random_string(), b64_chars, etc to `textmanip.__init__`
+* add functions `j.tm.remove_*`
+* add functions `j.tm.path.*_filename_safe`
+
 #### 0.0.5
 * add functions find_common_prefix, find_common_suffix
 
