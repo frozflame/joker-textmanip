@@ -10,6 +10,13 @@ chsi_digits = '零一二三四五六七八九'
 
 chtr_digits = '零壹贰叁肆伍陆柒捌玖'
 
+punctuations = [
+    ('(', '\uff08'),
+    (')', '\uff09'),
+    ('.', '\u3002'),
+    (',', '\uff0c'),
+]
+
 
 def _repdiv(num, divisor):
     results = []
@@ -64,4 +71,27 @@ def integer_to_chsicap(num):
 
 
 def chinese_to_integer():
-    pass
+    raise NotImplementedError
+
+
+_map_chsi_0110 = {
+    '一': '1', '二': '2', '三': '3', '四': '4', '五': '5',
+    '六': '6', '七': '7', '八': '8', '九': '9', '十': '10',
+}
+
+_map_chsi_1120 = {
+    '十一': '11', '十二': '12', '十三': '13', '十四': '14', '十五': '15',
+    '十六': '16', '十七': '17', '十八': '18', '十九': '19', '二十': '20',
+}
+
+
+def replace_small_chsi_with_decimal(s):
+    regex = re.compile(r'[一二三四五六七八九十]+', re.UNICODE)
+    for _map in [_map_chsi_1120, _map_chsi_0110]:
+        s = regex.sub(lambda m: _map[m.group()], s)
+    return s
+
+
+def replace_small_decimal_with_chsi(s):
+    regex = re.compile(r'\d+')
+    return regex.sub(lambda m: integer_to_chsi(m.group()), s)
