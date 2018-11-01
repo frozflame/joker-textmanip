@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# coding: utf-8
+
 
 unicode_blocks = [
     (0x0000, 0x001F, "Control character"),
@@ -281,9 +284,7 @@ unicode_blocks = [
     (0xE0100, 0xE01EF, "Variation Selectors Supplement"),
 ]
 
-
 unicode_blkmap = {tu[2]: tuple(tu[:2]) for tu in unicode_blocks}
-
 
 cjk_blocks = [
     (0x2E80, 0x2EFF, "CJK Radicals Supplement"),
@@ -291,8 +292,8 @@ cjk_blocks = [
     (0x31C0, 0x31EF, "CJK Strokes"),
     (0x3200, 0x32FF, "CJK Enclosed Letters and Months"),
     (0x3300, 0x33FF, "CJK Compatibility"),
-    (0x3400, 0x4DBF, "CJK Unified Ideographs Extension A"),     # 6591
-    (0x4E00, 0x9FFF, "CJK Unified Ideographs"),                 # 20992
+    (0x3400, 0x4DBF, "CJK Unified Ideographs Extension A"),  # 6591
+    (0x4E00, 0x9FFF, "CJK Unified Ideographs"),  # 20992
     (0xF900, 0xFAFF, "CJK Compatibility Ideographs"),
     (0xFE30, 0xFE4F, "CJK Compatibility Forms"),
 ]
