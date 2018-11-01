@@ -8,12 +8,20 @@ from collections import OrderedDict
 from joker.cast.iterative import nonblank_lines_of
 
 
+def _split2(s):
+    parts = s.strip().split(None, 1)
+    while len(parts) < 2:
+        parts.append(None)
+    return tuple(parts)
+
+
 def text_to_dict(lines, reverse=False):
     if isinstance(lines, str):
         lines = lines.splitlines()
-    tups = [tuple(lx.strip().split(None, 1)) for lx in lines]
+    tups = [_split2(x) for x in lines]
     if reverse:
         tups = [tu[::-1] for tu in tups]
+    # print('debug: tups', tups)
     return OrderedDict(tups)
 
 
