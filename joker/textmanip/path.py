@@ -65,3 +65,12 @@ def proper_filename(s):
     s = re.sub(r"['\s]+", '_', s)
     s = re.sub(r'\s*\(([0-9]+)\)\.', r'-\1.', s)
     return s
+
+
+def check_outpath(path, outpath, ext):
+    if outpath is None:
+        outpath = os.path.splitext(path)[0] + ext
+    if os.path.exists(outpath):
+        raise FileExistsError(outpath)
+    return outpath
+
