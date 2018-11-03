@@ -1,6 +1,12 @@
 Changes of joker-textmanip
 ==========================
 
+#### 0.1.0
+* remove modules: misc, draw
+* rename uniblk to data
+* regex.make_range_pattern()
+* regex: remove_cjk(),  remove_spaces_be{side,tween}_cjk
+
 #### 0.0.6
 * move random_string(), b64_chars, etc to `textmanip.__init__`
 * add functions `j.tm.remove_*`
