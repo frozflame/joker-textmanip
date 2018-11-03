@@ -6,6 +6,42 @@ from __future__ import unicode_literals
 import re
 from collections import deque
 
+_cache = {}
+
+cjk_blocks = [
+    (0x2E80, 0x2EFF, "CJK Radicals Supplement"),
+    (0x3000, 0x303F, "CJK Symbols & Punctuation"),
+    (0x31C0, 0x31EF, "CJK Strokes"),
+    (0x3200, 0x32FF, "CJK Enclosed Letters and Months"),
+    (0x3300, 0x33FF, "CJK Compatibility"),
+    (0x3400, 0x4DBF, "CJK Unified Ideographs Extension A"),
+    (0x4E00, 0x9FFF, "CJK Unified Ideographs"),
+    (0xF900, 0xFAFF, "CJK Compatibility Ideographs"),
+    (0xFE30, 0xFE4F, "CJK Compatibility Forms"),
+]
+
+
+def _cjk():
+    try:
+        return _cache['_cjk']
+    except KeyError:
+        from joker.textmanip.regex import make_range_pattern
+        return make_range_pattern(cjk_blocks)
+
+
+def remove_cjk(text):
+    return re.sub('[{}]'.format(_cjk()), '', text)
+
+
+def remove_spaces_beside_cjk(text):
+    parts = re.split(r'\s*([{}]+)\s*'.format(_cjk()), text)
+    return ''.join(parts)
+
+
+def remove_spaces_between_cjk(text):
+    return re.sub(r'([{0}]+)\s+(?=[{0}])'.format(_cjk()), r'\1', text)
+
+
 chsi_digits = '零一二三四五六七八九'
 
 chtr_digits = '零壹贰叁肆伍陆柒捌玖'
