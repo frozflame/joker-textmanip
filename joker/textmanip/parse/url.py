@@ -14,6 +14,32 @@ import joker.textmanip.path
 url_to_filename = joker.textmanip.path.url_to_filename
 
 
+def validate_ipv4_address(address):
+    import socket
+    # http://stackoverflow.com/a/4017219/2925169
+    try:
+        socket.inet_pton(socket.AF_INET, address)
+    except AttributeError:  # no inet_pton here, sorry
+        try:
+            socket.inet_aton(address)
+        except socket.error:
+            return False
+        return address.count('.') == 3
+    except socket.error:  # not a valid address
+        return False
+    return True
+
+
+def validate_ipv6_address(address):
+    import socket
+    # http://stackoverflow.com/a/4017219/2925169
+    try:
+        socket.inet_pton(socket.AF_INET6, address)
+    except socket.error:  # not a valid address
+        return False
+    return True
+
+
 class URLMutable(object):
     def __init__(self, url):
         p = urllib.parse.urlparse(url)
@@ -99,15 +125,3 @@ def url_simplify(url, queries=('id',)):
     mut['fragment'] = ''
     return str(mut)
 
-
-def test_url_simplify():
-    import sys
-    if sys.argv[1:]:
-        s = sys.argv[1]
-    else:
-        s = 'https://www.example.com/a/bc?id=920&from=index#detail'
-    print(url_simplify(s))
-
-
-if __name__ == '__main__':
-    test_url_simplify()

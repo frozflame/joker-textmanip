@@ -3,7 +3,7 @@
 
 from __future__ import division, print_function
 
-from joker.textmanip.parse.url import URLMutable
+from joker.textmanip.parse.url import URLMutable, url_simplify
 
 
 def test_mutlink():
@@ -23,6 +23,16 @@ def test_embed_link():
     assert g == urlmut.unembed_link(k)
 
 
+def test_url_simplify():
+    import sys
+    if sys.argv[1:]:
+        s = sys.argv[1]
+    else:
+        s = 'https://www.example.com/a/bc?id=920&from=index#detail'
+    print(url_simplify(s))
+
+
 if __name__ == '__main__':
     lm = test_mutlink()
     test_mutlink()
+    test_url_simplify()
