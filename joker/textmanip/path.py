@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 import os
 import re
+import datetime
 
 
 def url_to_filename(url):
@@ -65,6 +66,16 @@ def proper_filename(s):
     s = re.sub(r"['\s]+", '_', s)
     s = re.sub(r'\s*\(([0-9]+)\)\.', r'-\1.', s)
     return s
+
+
+def adapt_outpath(path, outpath, ext):
+    if outpath is None:
+        outpath = os.path.splitext(path)[0] + ext
+    while os.path.exists(outpath):
+        stempath, ext = os.path.splitext(outpath)
+        a = stempath, datetime.datetime.now(), id(stempath) % 100, ext
+        outpath = '{}.{:%y%m%d-%H%M%S}-{:02}{}'.format(*a)
+    return outpath
 
 
 def check_outpath(path, outpath, ext):
