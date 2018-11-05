@@ -42,6 +42,32 @@ def remove_spaces_between_cjk(text):
     return re.sub(r'([{0}]+)\s+(?=[{0}])'.format(_cjk()), r'\1', text)
 
 
+def _filter_encodings(s, func):
+    from joker.textmanip.data import get_all_encodings
+    viable_encodings = list()
+    for enc in get_all_encodings():
+        try:
+            func(s, enc)
+            viable_encodings.append(enc)
+        except ValueError:
+            pass
+    return viable_encodings
+
+
+def who_can_encode(text):
+    return _filter_encodings(
+        text,
+        lambda x, c: x.encode(c),
+    )
+
+
+def who_can_decode(text):
+    return _filter_encodings(
+        text,
+        lambda x, c: x.encode(c),
+    )
+
+
 def _encode(text, enc):
     try:
         return text.encode(enc)
