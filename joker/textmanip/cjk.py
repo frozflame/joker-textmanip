@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-from __future__ import unicode_literals
+from __future__ import division, unicode_literals
 
+import collections
 import re
-from collections import deque
 
 _cache = {}
 
@@ -42,6 +42,54 @@ def remove_spaces_between_cjk(text):
     return re.sub(r'([{0}]+)\s+(?=[{0}])'.format(_cjk()), r'\1', text)
 
 
+def _encode(text, enc):
+    try:
+        return text.encode(enc)
+    except Exception:
+        pass
+
+
+def _decode(text, dec):
+    try:
+        return text.decode(dec)
+    except Exception:
+        pass
+
+
+def brutal_cjk_decode(text, lang='sc'):
+    from joker.textmanip.data import (
+        get_most_frequent_characters, get_all_encodings)
+
+    available_encodings = get_all_encodings()
+    candidates = collections.defaultdict(list)
+    if not isinstance(text, bytes):
+        for enc in available_encodings:
+            candidates[_encode(text, enc)].append(enc)
+        candidates.pop(None, [])
+    else:
+        candidates[text] = [None]
+
+    results = collections.defaultdict(list)
+    for binary, encs in candidates.items():
+        for dec in available_encodings:
+            results[_decode(binary, dec)].append((dec, encs))
+    results.pop(None, [])
+
+    if not results:
+        return None, 0, []
+
+    scores = []
+    mfc = set(get_most_frequent_characters(lang))
+    for rs in results:
+        # print(rs, repr(rs))
+        sc = len([1 for x in rs if x in mfc]) / len(rs)
+        scores.append((sc, rs))
+    scores.sort(reverse=True)
+
+    sc, rs = scores[0]
+    return rs, sc, results[rs]
+
+
 chsi_digits = '零一二三四五六七八九'
 
 chtr_digits = '零壹贰叁肆伍陆柒捌玖'
@@ -64,7 +112,7 @@ def _repdiv(num, divisor):
 
 
 def i2ch_lt10k(num, digits, units):
-    parts = deque()
+    parts = collections.deque()
     for u, n in enumerate(_repdiv(num, 10)):
         if n:
             parts.appendleft(units[u])
@@ -84,7 +132,7 @@ def i2chsi(num, digits, units):
         return units[1]
     if num < 20:
         return units[1] + digits[num % 10]
-    parts = deque()
+    parts = collections.deque()
     for u8, n8 in enumerate(_repdiv(num, 10 ** 8)):
         if u8:
             parts.appendleft(units[5])
