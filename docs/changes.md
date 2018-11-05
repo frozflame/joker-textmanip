@@ -2,10 +2,15 @@ Changes of joker-textmanip
 ==========================
 
 #### 0.1.0
-* remove modules: misc, draw
-* rename uniblk to data
-* regex.make_range_pattern()
-* regex: remove_cjk(),  remove_spaces_be{side,tween}_cjk
+* remove modules: `jt.misc`, `jt.draw`, `jt.uniblk`
+* rename `jt.chinese` to `jt.cjk`
+* add module `jt.data` and `asset` directory for builtin datasets
+* add `jt.regex.make_range_pattern()`
+* add `jt.cjk.remove_cjk()`,  `jt.cjk.remove_spaces_be{side,tween}_cjk`
+* add `jt.cjk.brutal_cjk_decode()`
+* add `remove_emptylines()`, `dedup_spaces()`, `proper_join()` in `jt.__init__`
+* add `jt.path.adapt_outpath()`
+* add `jt.parse.url.validate_ipv{4,6}_address()`
 
 #### 0.0.6
 * move random_string(), b64_chars, etc to `textmanip.__init__`
