@@ -5,6 +5,7 @@ from __future__ import division, print_function
 
 import os
 import sys
+
 from joker.textmanip.useragent import UserAgent
 
 
@@ -16,7 +17,7 @@ def loc(filename):
 
 
 def test_useragent():
-    strings = open(loc('ua_strings.txt'))
+    strings = open(loc('useragents.txt'))
     for s in strings:
         s = s.strip()
         if not s.strip():
