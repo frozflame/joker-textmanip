@@ -3,41 +3,9 @@
 
 from __future__ import unicode_literals
 
+import datetime
 import os
 import re
-import datetime
-
-
-def url_to_filename(url):
-    # http://stackoverflow.com/questions/295135/
-    name = re.sub(r'[^\w\s_.-]+', '-', url)
-    return re.sub(r'^{http|https|ftp}', '', name)
-
-
-def ext_join(path, ext):
-    """
-    >>> ext_join('~/html/index.txt', 'html')
-    '~/html/index.html'
-    >>> ext_join('~/html/index.txt', '.html')
-    '~/html/index.txt.html'
-
-    :param path: (str)
-    :param ext: (str)
-    :return:
-    """
-    if ext.startswith(os.path.extsep):
-        return path + ext
-    p, _ = os.path.splitext(path)
-    return p + os.path.extsep + ext
-
-
-smart_extension_join = ext_join
-
-
-def unix_filename_safe(s):
-    # ASCII 47: "/"
-    return s.translate(dict.fromkeys([0, 47]))
-
 
 windows_reserved_names = {
     'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4',
@@ -59,6 +27,11 @@ def windows_filename_safe(s):
     return s
 
 
+def unix_filename_safe(s):
+    # ASCII 47: "/"
+    return s.translate(dict.fromkeys([0, 47]))
+
+
 def proper_filename(s):
     s = windows_filename_safe(s.strip())
     # remove leading .-, and repl quotes/spaces with _
@@ -68,20 +41,36 @@ def proper_filename(s):
     return s
 
 
-def adapt_outpath(path, outpath, ext):
-    if outpath is None:
-        outpath = os.path.splitext(path)[0] + ext
-    while os.path.exists(outpath):
-        stempath, ext = os.path.splitext(outpath)
-        a = stempath, datetime.datetime.now(), id(stempath) % 100, ext
-        outpath = '{}.{:%y%m%d-%H%M%S}-{:02}{}'.format(*a)
-    return outpath
+def make_new_path(path, ext=None, check=-1):
+    """
+    :param path: (str)
+    :param ext: (str)
+    :param check: (int)
+    :return: (str)
 
+    check = -1: return a modified path
+    check = 0: do not check existence
+    check = 1: raise FileExistsError
 
-def check_outpath(path, outpath, ext):
-    if outpath is None:
-        outpath = os.path.splitext(path)[0] + ext
-    if os.path.exists(outpath):
-        raise FileExistsError(outpath)
-    return outpath
+    >>> make_new_path('~/html/index.txt', 'html')
+    '~/html/index.html'
+    >>> make_new_path('~/html/index.txt', '.html')
+    '~/html/index.txt.html'
+    """
+    if ext is not None:
+        if not ext.startswith(os.extsep):
+            ext = os.extsep + ext
+        path = os.path.splitext(path)[0] + ext
+
+    if check == 0:
+        return path
+
+    while os.path.exists(path):
+        if check == -1:
+            raise FileExistsError(path)
+        base_path, ext = os.path.splitext(path)
+        a = base_path, datetime.datetime.now(), id(path) % 100, ext
+        path = '{}.{:%y%m%d-%H%M%S}-{:02}{}'.format(*a)
+    return path
+
 
