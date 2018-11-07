@@ -5,13 +5,16 @@ from __future__ import unicode_literals
 
 import base64
 import collections
+import re
 
 from joker.cast import namedtuple_to_dict
 from six.moves import urllib
 
-import joker.textmanip.path
 
-url_to_filename = joker.textmanip.path.url_to_filename
+def url_to_filename(url):
+    # http://stackoverflow.com/questions/295135/
+    name = re.sub(r'[^\w\s_.-]+', '-', url)
+    return re.sub(r'^{http|https|ftp}', '', name)
 
 
 def validate_ipv4_address(address):
@@ -124,4 +127,3 @@ def url_simplify(url, queries=('id',)):
     mut.query = {k: v for k, v in mut.query.items() if k in queries}
     mut['fragment'] = ''
     return str(mut)
-

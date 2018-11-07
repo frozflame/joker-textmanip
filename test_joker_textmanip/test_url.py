@@ -3,7 +3,7 @@
 
 from __future__ import division, print_function
 
-from joker.textmanip.parse.url import URLMutable, url_simplify
+from joker.textmanip.url import URLMutable, url_simplify
 
 
 def test_mutlink():

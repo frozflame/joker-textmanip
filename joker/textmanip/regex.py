@@ -42,9 +42,6 @@ def infer_affix_pattern(strings):
     return re.escape(prefix) + ptn + re.escape(suffix)
 
 
-build_pattern = infer_affix_pattern
-
-
 def make_range_pattern(blocks):
     """
     >>> blocks = [(48, 50), 65]
@@ -59,5 +56,3 @@ def make_range_pattern(blocks):
         else:
             parts.append(chr(tuple_or_int))
     return ''.join(parts)
-
-

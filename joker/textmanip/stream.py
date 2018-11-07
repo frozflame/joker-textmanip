@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from __future__ import division, print_function
+
 import os
 import time
 
@@ -14,6 +15,7 @@ class AtomicTailer(object):
     a minimized version with this issue fixed:
         https://github.com/six8/pytailer/issues/9
     """
+
     def __init__(self, file, read_size=1024, interval=1.,
                  linesep=None, timeout=60):
 
@@ -73,5 +75,3 @@ class AtomicTailer(object):
                     break
                 self.file.seek(pos)
                 time.sleep(self.interval)
-
-

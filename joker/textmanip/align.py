@@ -3,10 +3,7 @@
 from __future__ import division, print_function
 
 import re
-from collections import defaultdict
 from os.path import commonprefix
-
-from joker.cast import numerify
 
 
 def _deep_strip(s):
@@ -95,41 +92,6 @@ def text_equal_width(lines, method='ljust'):
         return [x.rjust(maxlen) for x in lines]
     else:
         return [x.ljust(maxlen) for x in lines]
-
-
-def tabular_format(rows):
-    rowcount = 0
-    columns = defaultdict(list)
-    columntypes = defaultdict(set)
-    for row in rows:
-        rowcount += 1
-        for ic, cell in enumerate(row):
-            cell = numerify(str(cell))
-            columns[ic].append(cell)
-            columntypes[ic].add(type(cell))
-
-    types = [str, float, int]
-    for ic in range(len(columns)):
-        type_ = str
-        for type_ in types:
-            if type_ in columntypes[ic]:
-                break
-        if type_ == float:
-            columns[ic] = text_align_for_floats(columns[ic])
-        if type_ == int:
-            just_method = 'rjust'
-        else:
-            just_method = 'ljust'
-        columns[ic] = text_equal_width(columns[ic], method=just_method)
-        print(ic, columns[ic])
-
-    rows = []
-    for ir in range(rowcount):
-        row = []
-        for ic in range(len(columns)):
-            row.append(columns[ic][ir])
-        rows.append(row)
-    return rows
 
 
 def commonsuffix(sequences):
