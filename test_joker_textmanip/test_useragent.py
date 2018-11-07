@@ -4,6 +4,8 @@
 from __future__ import division, print_function
 
 import os
+import sys
+from joker.textmanip.useragent import UserAgent
 
 
 def loc(filename):
@@ -19,9 +21,7 @@ def test_useragent():
         s = s.strip()
         if not s.strip():
             continue
-        # print(repr(UserAgent.from_string(s)), file=sys.stderr)
-        # print(s)
-        # print()
+        print(repr(UserAgent.from_string(s)), file=sys.stderr)
 
 
 if __name__ == '__main__':

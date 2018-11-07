@@ -3,8 +3,15 @@
 
 from __future__ import unicode_literals
 
-from joker.textmanip.regex import (
-    remove_cjk, remove_spaces_beside_cjk, remove_spaces_between_cjk)
+from joker.textmanip.cjk import (
+    remove_cjk, remove_spaces_beside_cjk, remove_spaces_between_cjk, integer_to_chsi
+)
+
+
+def test_integer_to_chsi():
+    assert integer_to_chsi(127000) == '一十二万七千'
+    assert integer_to_chsi(127001) == '一十二万七千零一'
+    assert integer_to_chsi(2127000127000) == '二万一千二百七十亿一十二万七千'
 
 
 def rp(o):

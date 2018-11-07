@@ -150,4 +150,3 @@ class UserAgent(object):
 
     def is_msie(self):
         return 'msie' in self.system.lower()
-
