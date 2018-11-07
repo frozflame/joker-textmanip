@@ -10,24 +10,32 @@ from joker.cast import cache_lookup
 from joker.cast.iterative import nonblank_lines_of
 from joker.place import under_package_dir
 
-_cache = {}
+# const cache
+_const_cache = {}
 
 
-def const(func):
-    return functools.wraps(func)(lambda: cache_lookup(_cache, func, func))
-
-
-def const1(func):
+def const_getter(func):
     return functools.wraps(func)(
-        lambda k: cache_lookup(_cache, (func, k), func, k)
+        lambda: cache_lookup(_const_cache, func, func)
     )
 
 
-@const
+def const_lookup(func):
+    return functools.wraps(func)(
+        lambda *args: cache_lookup(_const_cache, (func, args), func, *args)
+    )
+
+
+def _locate(name):
+    return under_package_dir(joker.textmanip, 'asset', name)
+
+
+@const_getter
 def get_unicode_blocks():
-    path = under_package_dir(joker.textmanip, 'asset/unicode_blocks.txt')
+    path = _locate('unicode_blocks.txt')
     results = []
-    for head, tail, title in nonblank_lines_of(path):
+    for line in nonblank_lines_of(path):
+        head, tail, title = line.split(None, 2)
         head = int(head, base=0)
         tail = int(tail, base=0)
         results.append((head, tail, title))
@@ -49,14 +57,13 @@ def blocks_to_name_tuple_map(blocks=None):
     return {tu[2]: tuple(tu[:2]) for tu in blocks}
 
 
-@const
+@const_getter
 def get_all_encodings():
-    path = under_package_dir(joker.textmanip, 'asset/encodings.txt')
-    return list(nonblank_lines_of(path))
+    return list(nonblank_lines_of(_locate('encodings.txt')))
 
 
-@const1
+@const_lookup
 def get_most_frequent_characters(lang='sc'):
-    path = 'dataset/mfc-{}.txt'.format(lang)
+    path = 'asset/mfc-{}.txt'.format(lang)
     path = under_package_dir(joker.textmanip, path)
     return ''.join(nonblank_lines_of(path))
