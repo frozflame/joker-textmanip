@@ -8,7 +8,7 @@ import functools
 import joker.textmanip
 from joker.cast import cache_lookup
 from joker.cast.iterative import nonblank_lines_of
-from joker.place import under_package_dir
+from joker.default import under_package_dir
 
 # const cache
 _const_cache = {}

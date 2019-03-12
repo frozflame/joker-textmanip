@@ -41,7 +41,7 @@ def proper_filename(s):
     return s
 
 
-def make_new_path(path, ext=None, check=-1):
+def make_new_path(path, ext=None, check=1):
     """
     :param path: (str)
     :param ext: (str)
@@ -66,7 +66,7 @@ def make_new_path(path, ext=None, check=-1):
         return path
 
     while os.path.exists(path):
-        if check == -1:
+        if check == 1:
             raise FileExistsError(path)
         base_path, ext = os.path.splitext(path)
         a = base_path, datetime.datetime.now(), id(path) % 100, ext
