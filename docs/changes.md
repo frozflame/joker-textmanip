@@ -4,6 +4,8 @@ Changes of joker-textmanip
 #### 0.2.0
 * explode `jt.parse` into `jt.{url,tabular,useragent}`
 * add `jt.cjk.who_can_{en,de}code()`
+* add `jt.path.make_new_path()`
+* add `jt.stream.{iter_lines,nonblank_lines_of}`
 
 #### 0.1.0
 * remove modules: `jt.misc`, `jt.draw`, `jt.uniblk`
