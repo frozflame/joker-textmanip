@@ -7,6 +7,33 @@ import os
 import time
 
 
+def _iter_lines(path, *args, **kwargs):
+    with open(path, *args, **kwargs) as fin:
+        for line in fin:
+            yield line
+
+
+def _iter_stdin_lines():
+    import sys
+    for line in sys.stdin:
+        yield line
+
+
+def iter_lines(path, *args, **kwargs):
+    if not path or path == '-':
+        return _iter_stdin_lines()
+    else:
+        return _iter_lines(path, *args, **kwargs)
+
+
+def nonblank_lines_of(path, *args, **kwargs):
+    for line in iter_lines(path, *args, **kwargs):
+        line = line.strip()
+        if not line:
+            continue
+        yield line
+
+
 class AtomicTailer(object):
     """
     Read log file on-line
