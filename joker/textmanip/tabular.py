@@ -4,6 +4,12 @@
 from __future__ import division, print_function
 
 import collections
+import pprint
+
+from joker.cast import numerify
+
+from joker.textmanip import align
+from joker.textmanip.stream import nonblank_lines_of
 
 
 def _split2(s):
@@ -13,19 +19,60 @@ def _split2(s):
     return tuple(parts)
 
 
-def text_to_dict(lines, reverse=False):
+def text_numsum(lines):
+    total = 0
+    count = 0
+    for x in lines:
+        count += 1
+        try:
+            total += numerify(x)
+        except (TypeError, ValueError):
+            continue
+    mean = 1. * total / count
+    if total == int(total):
+        total = int(total)
+    if mean == int(mean):
+        mean = int(mean)
+    return total, mean
+
+
+def text_to_list(lines):
+    if isinstance(lines, str):
+        lines = lines.splitlines()
+    return [l.strip().split() for l in lines]
+
+
+def text_to_dict(lines, swap=False, ordered=False):
     if isinstance(lines, str):
         lines = lines.splitlines()
     tups = [_split2(x) for x in lines]
-    if reverse:
+    if swap:
         tups = [tu[::-1] for tu in tups]
-    # print('debug: tups', tups)
-    return collections.OrderedDict(tups)
+    if ordered:
+        return collections.OrderedDict(tups)
+    else:
+        return dict(tups)
 
 
-def textfile_to_dict(path, reverse=False):
-    from joker.cast.iterative import nonblank_lines_of
-    return text_to_dict(nonblank_lines_of(path), reverse=reverse)
+def textfile_numsum(path, printout=True):
+    rv = text_numsum(nonblank_lines_of(path))
+    if printout:
+        print(*rv)
+    return rv
+
+
+def textfile_to_list(path, printout=True):
+    rv = text_to_list(nonblank_lines_of(path))
+    if printout:
+        pprint.pprint(rv)
+    return rv
+
+
+def textfile_to_dict(path, swap=False, ordered=False, printout=True):
+    rv = text_to_dict(nonblank_lines_of(path), swap=swap, ordered=ordered)
+    if printout:
+        pprint.pprint(rv, indent=4)
+    return rv
 
 
 def dataframe_to_dicts(df):
@@ -37,8 +84,6 @@ def dataframe_to_dicts(df):
 
 
 def tabular_format(rows):
-    from joker.cast import numerify
-    from joker.textmanip import align
     rowcount = 0
     columns = collections.defaultdict(list)
     columntypes = collections.defaultdict(set)
