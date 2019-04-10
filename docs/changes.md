@@ -1,6 +1,9 @@
 Changes of joker-textmanip
 ==========================
 
+#### 0.2.1
+add `jt.tabular.text{,file}_{to_list,to_dict,numsum}`
+
 #### 0.2.0
 * explode `jt.parse` into `jt.{url,tabular,useragent}`
 * add `jt.cjk.who_can_{en,de}code()`

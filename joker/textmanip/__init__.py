@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 b32_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
 b64_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
