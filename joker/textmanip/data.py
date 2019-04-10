@@ -5,10 +5,11 @@ from __future__ import unicode_literals
 
 import functools
 
-import joker.textmanip
 from joker.cast import cache_lookup
-from joker.cast.iterative import nonblank_lines_of
 from joker.default import under_package_dir
+
+import joker.textmanip
+from joker.textmanip.tabular import nonblank_lines_of
 
 # const cache
 _const_cache = {}
