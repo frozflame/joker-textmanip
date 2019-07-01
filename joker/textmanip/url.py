@@ -123,7 +123,6 @@ LinkMutable = URLMutable
 def url_simplify(url, queries=('id',)):
     queries = set(queries)
     mut = URLMutable(url)
-    mut.query = dict(id=mut.query.get('id'))
     mut.query = {k: v for k, v in mut.query.items() if k in queries}
     mut['fragment'] = ''
     return str(mut)
