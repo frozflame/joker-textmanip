@@ -37,12 +37,14 @@ def text_numsum(lines):
 
 
 def text_to_list(lines):
+    """Get a list of lists from lines of text"""
     if isinstance(lines, str):
         lines = lines.splitlines()
     return [l.strip().split() for l in lines]
 
 
 def text_to_dict(lines, swap=False, ordered=False):
+    """Get a dict or OrderedDict from lines of text"""
     if isinstance(lines, str):
         lines = lines.splitlines()
     tups = [_split2(x) for x in lines]
@@ -62,6 +64,7 @@ def textfile_numsum(path, printout=True):
 
 
 def textfile_to_list(path, printout=True):
+    """Get a list of lists from a path to a text file"""
     rv = text_to_list(nonblank_lines_of(path))
     if printout:
         pprint.pprint(rv)
@@ -69,6 +72,7 @@ def textfile_to_list(path, printout=True):
 
 
 def textfile_to_dict(path, swap=False, ordered=False, printout=True):
+    """Get a dict from a path to a text file"""
     rv = text_to_dict(nonblank_lines_of(path), swap=swap, ordered=ordered)
     if printout:
         pprint.pprint(rv, indent=4)

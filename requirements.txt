@@ -1,2 +1,3 @@
-six
 joker-cast>=0.1.0
+six
+pyyaml
