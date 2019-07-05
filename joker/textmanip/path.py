@@ -34,8 +34,8 @@ def unix_filename_safe(s):
 
 def proper_filename(s):
     s = windows_filename_safe(s.strip())
-    # remove leading .-, and repl quotes/spaces with _
-    s = re.sub(r'^[.-]', '', s)
+    # replace leading .-, quotes/spaces with _
+    s = re.sub(r'^-', '_', s)
     s = re.sub(r"['\s]+", '_', s)
     s = re.sub(r'\s*\(([0-9]+)\)\.', r'-\1.', s)
     return s

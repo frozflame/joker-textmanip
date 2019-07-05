@@ -42,6 +42,13 @@ def infer_affix_pattern(strings):
     return re.escape(prefix) + ptn + re.escape(suffix)
 
 
+def _optchr(i):
+    c = chr(i)
+    if c.isalnum():
+        return c
+    return r'\x{:02X}'.format(i)
+
+
 def make_range_pattern(blocks):
     """
     >>> blocks = [(48, 50), 65]
@@ -51,7 +58,7 @@ def make_range_pattern(blocks):
     parts = []
     for tuple_or_int in blocks:
         if isinstance(tuple_or_int, tuple):
-            p = '{}-{}'.format(*map(chr, tuple_or_int[:2]))
+            p = '{}-{}'.format(*map(_optchr, tuple_or_int[:2]))
             parts.append(p)
         else:
             parts.append(chr(tuple_or_int))
