@@ -120,3 +120,18 @@ def tabular_format(rows):
             row.append(columns[ic][ir])
         rows.append(row)
     return rows
+
+
+def _kvfmt(k, v, n, colon=':'):
+    k = (k + colon).ljust(n)
+    return '{}{}\n'.format(k, v)
+
+
+def format_dictionary(d, bullet='*', colon=':'):
+    n = max(len(k) for k in d) + 3
+    parts = [bullet + _kvfmt(k, v, n, colon) for k, v in d.items()]
+    return ''.join(parts)
+
+
+def format_help_section(title, content):
+    return title + ':\n' + format_dictionary(content, '  ', '') + '\n\n'
