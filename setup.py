@@ -48,6 +48,7 @@ config = {
     'namespace_packages': ["joker"],
     'zip_safe': False,
     'install_requires': read("requirements.txt"),
+    'entry_points': {'console_scripts': ['tman=joker.textmanip.main:registry']},
     'classifiers': [
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
