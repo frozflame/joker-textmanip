@@ -56,14 +56,14 @@ def text_to_dict(lines, swap=False, ordered=False):
         return dict(tups)
 
 
-def textfile_numsum(path, printout=True):
+def textfile_numsum(path, printout=False):
     rv = text_numsum(nonblank_lines_of(path))
     if printout:
         print(*rv)
     return rv
 
 
-def textfile_to_list(path, printout=True):
+def textfile_to_list(path, printout=False):
     """Get a list of lists from a path to a text file"""
     rv = text_to_list(nonblank_lines_of(path))
     if printout:
@@ -71,7 +71,7 @@ def textfile_to_list(path, printout=True):
     return rv
 
 
-def textfile_to_dict(path, swap=False, ordered=False, printout=True):
+def textfile_to_dict(path, swap=False, ordered=False, printout=False):
     """Get a dict from a path to a text file"""
     rv = text_to_dict(nonblank_lines_of(path), swap=swap, ordered=ordered)
     if printout:
