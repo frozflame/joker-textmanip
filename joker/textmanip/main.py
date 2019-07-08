@@ -35,18 +35,28 @@ def pprint_list(_, args):
     pprint.pprint(lines)
 
 
+def vprint_tab(_, args):
+    from joker.textmanip import tabular
+    rows = tabular.textfile_to_list(args[0])
+    for row in tabular.tabular_format(rows):
+        pass
+        print(*row)
+
+
 def total(_, args):
     from joker.textmanip.tabular import textfile_numsum
     textfile_numsum(_chkargs(args), printout=True)
 
 
 entries = {
+    'joker.textmanip.main:total': '+',
+    'joker.textmanip.main:vprint_tab': 'tab',
     'joker.textmanip.main:pprint_dict': 'd',
     'joker.textmanip.main:pprint_dictswap': 'ds',
     'joker.textmanip.main:pprint_list': 'l',
-    'joker.textmanip.main:pprint_list2d': 'tab',
-    'joker.textmanip.main:total': '+',
+    'joker.textmanip.main:pprint_list2d': 'L',
 }
+
 
 registry = CommandRegistry(entries)
 
