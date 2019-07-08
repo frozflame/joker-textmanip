@@ -111,7 +111,6 @@ def tabular_format(rows):
         else:
             just_method = 'ljust'
         columns[ic] = align.text_equal_width(columns[ic], method=just_method)
-        print(ic, columns[ic])
 
     rows = []
     for ir in range(rowcount):
