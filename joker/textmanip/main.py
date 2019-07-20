@@ -37,7 +37,7 @@ def pprint_list(_, args):
 
 def vprint_tab(_, args):
     from joker.textmanip import tabular
-    rows = tabular.textfile_to_list(args[0])
+    rows = tabular.textfile_to_list(_chkargs(args))
     for row in tabular.tabular_format(rows):
         pass
         print(*row)
@@ -48,7 +48,23 @@ def total(_, args):
     textfile_numsum(_chkargs(args), printout=True)
 
 
+def grep(_, args):
+    import re
+    from joker.textmanip.stream import nonblank_lines_of
+    try:
+        pattern = args[0]
+    except IndexError:
+        return
+    regex = re.compile(pattern)
+    idx = 1 if regex.groups == 1 else 0
+    for line in nonblank_lines_of(_chkargs(args[1:])):
+        mat = regex.search(line)
+        if mat:
+            print(mat.group(idx))
+
+
 entries = {
+    'joker.textmanip.main:grep': '/',
     'joker.textmanip.main:total': '+',
     'joker.textmanip.main:vprint_tab': 'tab',
     'joker.textmanip.main:pprint_dict': 'd',
