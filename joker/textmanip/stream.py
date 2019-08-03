@@ -5,6 +5,7 @@ from __future__ import division, print_function
 
 import os
 import time
+import sys
 
 
 def _iter_lines(path, *args, **kwargs):
@@ -14,13 +15,12 @@ def _iter_lines(path, *args, **kwargs):
 
 
 def _iter_stdin_lines():
-    import sys
     for line in sys.stdin:
         yield line
 
 
 def iter_lines(path, *args, **kwargs):
-    if not path or path == '-':
+    if not path or path in ['-', 'stdin', '/dev/stdin']:
         return _iter_stdin_lines()
     else:
         return _iter_lines(path, *args, **kwargs)
@@ -32,6 +32,26 @@ def nonblank_lines_of(path, *args, **kwargs):
         if not line:
             continue
         yield line
+
+
+def _write_lines(lines, path, mode='w', *args, **kwargs):
+    with open(path, mode, *args, **kwargs) as fout:
+        fout.writelines(lines)
+
+
+def _write_stdout_lines(lines, target=sys.stdout):
+    for line in lines:
+        target.write(line)
+    target.flush()
+
+
+def write_lines(lines, path, mode='w', *args, **kwargs):
+    if not path or path in ['-', 'stdout', '/dev/stdout']:
+        _write_stdout_lines(lines)
+    elif path in ['stderr', '/dev/stderr']:
+        _write_stdout_lines(lines, sys.stderr)
+    else:
+        _write_lines(lines, path, mode, *args, **kwargs)
 
 
 class AtomicTailer(object):

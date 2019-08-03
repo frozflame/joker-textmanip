@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
+import argparse
 import sys
+
 from volkanic.system import CommandRegistry
 
 
@@ -63,16 +65,34 @@ def grep(_, args):
             print(mat.group(idx))
 
 
+def _newline_conv(path, nl, suffix):
+    with open(path) as fin, open(path + suffix, 'w', newline=nl) as fout:
+        for line in fin:
+            fout.write(line)
+
+
+def nlconv(prog, args):
+    desc = 'convert newlines'
+    parser = argparse.ArgumentParser(prog=prog, description=desc)
+    parser.add_argument('-s', '--style', choices=['n', 'rn', 'r'])
+    parser.add_argument('path', help='an input data file')
+    args = parser.parse_args(args)
+    nls = {'n': '\n', 'rn': '\r\n', 'r': '\r'}
+    suffix = '.{}.txt'.format(args.style)
+    _newline_conv(args.path, nls.get(args.style), suffix)
+
+
 entries = {
     'joker.textmanip.main:grep': '/',
     'joker.textmanip.main:total': '+',
+    'joker.textmanip.main:nlconv': 'nl',
     'joker.textmanip.main:vprint_tab': 'tab',
-    'joker.textmanip.main:pprint_dict': 'd',
-    'joker.textmanip.main:pprint_dictswap': 'ds',
     'joker.textmanip.main:pprint_list': 'l',
     'joker.textmanip.main:pprint_list2d': 'L',
+    'joker.textmanip.main:pprint_dict': 'd',
+    'joker.textmanip.main:pprint_dictswap': 'ds',
+    'joker.textmanip.draw:mkbox': 'box',
 }
-
 
 registry = CommandRegistry(entries)
 
