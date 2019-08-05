@@ -125,4 +125,4 @@ def url_simplify(url, queries=('id',)):
     mut = URLMutable(url)
     mut.query = {k: v for k, v in mut.query.items() if k in queries}
     mut['fragment'] = ''
-    return str(mut)
+    return mut
