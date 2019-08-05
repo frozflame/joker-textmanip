@@ -76,10 +76,26 @@ def nlconv(prog, args):
     parser = argparse.ArgumentParser(prog=prog, description=desc)
     parser.add_argument('-s', '--style', choices=['n', 'rn', 'r'])
     parser.add_argument('path', help='an input data file')
-    args = parser.parse_args(args)
-    nls = {'n': '\n', 'rn': '\r\n', 'r': '\r'}
-    suffix = '.{}.txt'.format(args.style)
-    _newline_conv(args.path, nls.get(args.style), suffix)
+    ns = parser.parse_args(args)
+    newlines = {'n': '\n', 'rn': '\r\n', 'r': '\r'}
+    suffix = '.{}.txt'.format(ns.style)
+    _newline_conv(ns.path, newlines.get(ns.style), suffix)
+
+
+def urlsim(prog, args):
+    from joker.textmanip.url import url_simplify
+    desc = 'simplify a url'
+    parser = argparse.ArgumentParser(prog=prog, description=desc)
+    aa = parser.add_argument
+    parser.add_argument('-q', '--quote', action='store_true')
+    parser.add_argument('url')
+    parser.add_argument('query', nargs='*')
+    ns = parser.parse_args(args)
+    url = str(url_simplify(ns.url, ns.query))
+    if ns.quote:
+        import shlex
+        url = shlex.quote(url)
+    print(url)
 
 
 entries = {
@@ -91,6 +107,7 @@ entries = {
     'joker.textmanip.main:pprint_list2d': 'L',
     'joker.textmanip.main:pprint_dict': 'd',
     'joker.textmanip.main:pprint_dictswap': 'ds',
+    'joker.textmanip.main:urlsim': 'urlsim',
     'joker.textmanip.draw:mkbox': 'box',
 }
 
