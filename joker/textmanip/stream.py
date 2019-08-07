@@ -57,7 +57,6 @@ def write_lines(lines, path, mode='w', *args, **kwargs):
 
 
 class Stream(object):
-    __slots__ = ['file']
     opened = weakref.WeakValueDictionary()
     _preopened = {
         (1, 'w'): sys.stdout,
@@ -116,47 +115,103 @@ class Stream(object):
             pass
 
 
-class ShellStream(Stream):
-    def lines(self):
-        for line in self.file:
-            yield line.strip()
+def _grep(line, pattern, flags=0, group=None):
+    import re
+    mat = re.search(pattern, line, flags)
+    if group:
+        return mat and mat.group(group)
+    return mat and line
 
-    def nonblank_lines(self):
+
+def _ungrep(line, pattern, flags=0):
+    import re
+    if re.search(pattern, line, flags) is None:
+        return line
+
+
+def _sub(line, pattern, repl, count=0, flags=0):
+    import re
+    s, n = re.sub(pattern, repl, line, count=count, flags=flags)
+
+
+class ShellStream(Stream):
+    def __init__(self, file, *filters):
+        super(ShellStream, self).__init__(file)
+        self.filters = list(filters)
+
+    def copy(self):
+        return ShellStream(self.file, *self.filters)
+
+    def _apply_filters(self, line):
+        for f in self.filters:
+            line = f(line)
+            if line is None:
+                break
+        return line
+
+    def _iter_lines(self):
         for line in self.file:
-            line = line.strip()
-            if line:
+            line = self._apply_filters(line)
+            if line is not None:
                 yield line
+
+    def __iter__(self):
+        if self.filters:
+            return self._iter_lines()
+        return super(ShellStream, self).__iter__()
+
+    def lines(self):
+        return list(self)
+
+    def add_filters(self, *funcs):
+        self.filters.extend(funcs)
+        return self
+
+    def partial(self, func, *args, **kwargs):
+        self.filters.append(lambda s: func(s, *args, **kwargs))
+        return self
+
+    def __call__(self, func, *args, **kwargs):
+        return self.partial(func, *args, **kwargs)
+
+    def strip(self, chars=None):
+        self.filters.append(lambda s: s.strip(chars))
+        return self
+
+    def snl(self):
+        self.filters.append(lambda s: s.rstrip(os.linesep))
+        return self
+
+    def replace(self, old, new):
+        self.filters.append(lambda s: s.replace(old, new))
+        return self
+
+    def method(self, name, *args, **kwargs):
+        self.filters.append(lambda s: getattr(name, *args, **kwargs))
+        return self
+
+    def nonblank(self):
+        self.filters.append(lambda s: (s.strip() or None))
+        return self
 
     def ungrep(self, pattern, flags=0):
-        import re
-        for line in self.file:
-            if re.search(pattern, line, flags) is None:
-                yield line
+        self.filters.append(lambda line: _ungrep(line, pattern, flags))
+        return self
 
     def grep(self, pattern, flags=0, group=None):
-        import re
-        for line in self.file:
-            mat = re.search(pattern, line, flags)
-            if mat is None:
-                continue
-            if group is None:
-                yield line
-            else:
-                yield mat.group(group)
+        self.filters.append(lambda line: _grep(line, pattern, flags, group))
+        return self
 
-    def quote(self, strip=False):
-        import shlex
+    def sub(self, pattern):
+        pass
+
+    def quote(self, strip=True):
         if self.is_binary():
             raise TypeError('file should be opened in text mode')
-        if strip in ('l', 'r'):
-            func = getattr(str, str(strip) + 'strip')
-            lines = (func(line) for line in self.file)
-        elif strip:
-            lines = (line.strip() for line in self.file)
-        else:
-            lines = (line.rstrip('\n') for line in self.file)
-        for line in lines:
-            yield shlex.quote(line)
+        if strip:
+            self.strip()
+        import shlex
+        return self.add_filters(shlex.quote)
 
 
 class AtomicTailer(object):
