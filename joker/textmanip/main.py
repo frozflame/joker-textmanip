@@ -41,7 +41,6 @@ def vprint_tab(_, args):
     from joker.textmanip import tabular
     rows = tabular.textfile_to_list(_chkargs(args))
     for row in tabular.tabular_format(rows):
-        pass
         print(*row)
 
 
