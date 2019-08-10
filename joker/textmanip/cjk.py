@@ -56,17 +56,11 @@ def _filter_encodings(s, func):
 
 
 def who_can_encode(text):
-    return _filter_encodings(
-        text,
-        lambda x, c: x.encode(c),
-    )
+    return _filter_encodings(text, lambda x, c: x.encode(c))
 
 
 def who_can_decode(text):
-    return _filter_encodings(
-        text,
-        lambda x, c: x.encode(c),
-    )
+    return _filter_encodings(text, lambda x, c: x.encode(c))
 
 
 def _encode(text, enc):
