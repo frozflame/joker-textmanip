@@ -117,12 +117,25 @@ class URLMutable(object):
         return url
 
 
-LinkMutable = URLMutable
-
-
 def url_simplify(url, queries=('id',)):
     queries = set(queries)
     mut = URLMutable(url)
     mut.query = {k: v for k, v in mut.query.items() if k in queries}
     mut['fragment'] = ''
     return mut
+
+
+def run_urlsim(prog, args, func=None):
+    import argparse
+    func = url_simplify if func is None else func
+    desc = 'simplify a url'
+    parser = argparse.ArgumentParser(prog=prog, description=desc)
+    parser.add_argument('-q', '--quote', action='store_true')
+    parser.add_argument('url')
+    parser.add_argument('query', nargs='*')
+    ns = parser.parse_args(args)
+    url = str(func(ns.url, ns.query))
+    if ns.quote:
+        import shlex
+        url = shlex.quote(url)
+    print(url)
