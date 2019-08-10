@@ -113,21 +113,6 @@ def nlconv(prog, args):
     _newline_conv(ns.path, newlines.get(ns.style), suffix)
 
 
-def urlsim(prog, args):
-    from joker.textmanip.url import url_simplify
-    desc = 'simplify a url'
-    parser = argparse.ArgumentParser(prog=prog, description=desc)
-    parser.add_argument('-q', '--quote', action='store_true')
-    parser.add_argument('url')
-    parser.add_argument('query', nargs='*')
-    ns = parser.parse_args(args)
-    url = str(url_simplify(ns.url, ns.query))
-    if ns.quote:
-        import shlex
-        url = shlex.quote(url)
-    print(url)
-
-
 entries = {
     'joker.textmanip.main:grep': '/',
     'joker.textmanip.main:total': '+',
@@ -137,7 +122,7 @@ entries = {
     'joker.textmanip.main:pprint_list2d': 'L',
     'joker.textmanip.main:parse_as_dict': 'd',
     'joker.textmanip.main:quote_lines': 'quote',
-    'joker.textmanip.main:urlsim': 'urlsim',
+    'joker.textmanip.url:run_urlsim': 'urlsim',
     'joker.textmanip.draw:mkbox': 'box',
 }
 

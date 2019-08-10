@@ -1,8 +1,12 @@
 Changes of joker-textmanip
 ==========================
 
+### 0.3
+* add `__main__.py` (for `python -m joker.textmanip`)
+* remove `jt.url.LinkMutable` (use `jt.url.URLMutable`)
+
 #### 0.2.1
-add `jt.tabular.text{,file}_{to_list,to_dict,numsum}`
+* add `jt.tabular.text{,file}_{to_list,to_dict,numsum}`
 
 #### 0.2.0
 * explode `jt.parse` into `jt.{url,tabular,useragent}`
