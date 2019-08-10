@@ -7,6 +7,11 @@ import joker.textmanip
 from joker.textmanip import path
 
 
+def _chk(func, argument, expectation):
+    rv = func(argument)
+    assert expectation == rv, rv
+
+
 def test():
     assert joker.textmanip.remove_whitespaces('Sun Moon ') == 'SunMoon'
 
@@ -16,19 +21,14 @@ def test():
 
     a = 'unix/filename\n'
     b = 'unixfilename\n'
-    assert path.unix_filename_safe(a) == b
+    assert path.unix_filename_safe(a) == b, a
 
-    a = r'windows*/\filename?'
-    b = 'windowsfilename'
-    assert path.windows_filename_safe(a) == b
+    s = r'windows*/\filename?'
+    t = 'windows___filename_'
+    r = path.windows_filename_safe(s)
+    assert t == r, r
 
-    a = 'CON'
-    b = 'CON_'
-    assert path.windows_filename_safe(a) == b
-
-    a = '.my answer'
-    b = 'my_answer'
-    assert path.proper_filename(a) == b
+    _chk(path.windows_filename_safe, 'CON', 'CON_')
 
     a = 'textmanip'
     b = 'exmnp'

@@ -30,6 +30,7 @@ def _cjk():
 
 
 def remove_cjk(text):
+    print('_cjk', repr(_cjk()))
     return re.sub('[{}]'.format(_cjk()), '', text)
 
 
