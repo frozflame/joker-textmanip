@@ -3,6 +3,7 @@
 
 import argparse
 import sys
+from pprint import pprint
 
 from volkanic.system import CommandRegistry
 
@@ -15,14 +16,45 @@ def _chkargs(args):
     return args[0]
 
 
-def pprint_dict(_, args):
-    from joker.textmanip.tabular import textfile_to_dict
-    textfile_to_dict(_chkargs(args), printout=True)
+def _format_dict_as_shell_assoc_array(d, name):
+    import os
+    import shlex
+    for k, v in d.items():
+        if k.startswith('#'):
+            continue
+        v = os.path.expanduser(v)
+        yield "{}[{}]={}".format(name, k, shlex.quote(v))
 
 
-def pprint_dictswap(_, args):
+def parse_as_dict(prog, args):
+    import argparse
     from joker.textmanip.tabular import textfile_to_dict
-    textfile_to_dict(_chkargs(args), printout=True, swap=True)
+    desc = 'parse a text file into a dict and print'
+    parser = argparse.ArgumentParser(prog=prog, description=desc)
+    parser.add_argument('-i', '--invert', action='store_true')
+    parser.add_argument('-a', '--shell-array')
+    parser.add_argument('path', help='use "-" for stdin')
+    ns = parser.parse_args(args)
+    d = textfile_to_dict(ns.path, swap=ns.invert)
+    if ns.shell_array:
+        for line in _format_dict_as_shell_assoc_array(d, ns.shell_array):
+            print(line, end=';')
+    else:
+        pprint(d, indent=4)
+    print()
+
+
+def quote_lines(prog=None, args=None):
+    from joker.stream.shell import ShellStream
+    desc = 'Quote each line of text'
+    pr = argparse.ArgumentParser(prog=prog, description=desc)
+    aa = pr.add_argument
+    aa('-f', '--formula', default='QUOTED', help='e.g. -f "rm -fr QUOTED"')
+    aa('path', metavar='PATH', help='use - to read from STDIN')
+    ns = pr.parse_args(args)
+    with ShellStream.open(ns.path) as sstm:
+        for line in sstm.nonblank().quote(strip=True):
+            print(line)
 
 
 def pprint_list2d(_, args):
@@ -85,7 +117,6 @@ def urlsim(prog, args):
     from joker.textmanip.url import url_simplify
     desc = 'simplify a url'
     parser = argparse.ArgumentParser(prog=prog, description=desc)
-    aa = parser.add_argument
     parser.add_argument('-q', '--quote', action='store_true')
     parser.add_argument('url')
     parser.add_argument('query', nargs='*')
@@ -104,8 +135,8 @@ entries = {
     'joker.textmanip.main:vprint_tab': 'tab',
     'joker.textmanip.main:pprint_list': 'l',
     'joker.textmanip.main:pprint_list2d': 'L',
-    'joker.textmanip.main:pprint_dict': 'd',
-    'joker.textmanip.main:pprint_dictswap': 'ds',
+    'joker.textmanip.main:parse_as_dict': 'd',
+    'joker.textmanip.main:quote_lines': 'quote',
     'joker.textmanip.main:urlsim': 'urlsim',
     'joker.textmanip.draw:mkbox': 'box',
 }

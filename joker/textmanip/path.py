@@ -14,13 +14,13 @@ windows_reserved_names = {
 }
 
 
-def windows_filename_safe(s):
+def windows_filename_safe(s, repl='_'):
     # <>:"/\\|?* and ASCII 0 - 31
     # https://stackoverflow.com/a/31976060/2925169
     ordinals = [ord(c) for c in '<>:"/\\|?*']
     ordinals.extend(range(32))
-    s = s.translate(dict.fromkeys(ordinals))
-    if s.endswith(' ') or s.endswith('.'):
+    s = s.translate(dict.fromkeys(ordinals, repl))
+    if s.endswith('.'):
         s = s[:-1]
     if s.upper() in windows_reserved_names:
         s += '_'
@@ -33,7 +33,7 @@ def unix_filename_safe(s):
 
 
 def proper_filename(s):
-    s = windows_filename_safe(s.strip())
+    s = windows_filename_safe(s.strip(), '_')
     # replace leading .-, quotes/spaces with _
     s = re.sub(r'^-', '_', s)
     s = re.sub(r"['\s]+", '_', s)
