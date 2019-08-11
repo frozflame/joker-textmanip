@@ -45,7 +45,7 @@ def infer_affix_pattern(strings):
 def _optchr(i):
     if 48 <= i <= 90:
         return chr(i)
-    return r'\u{:02X}'.format(i)
+    return r'\u{:04X}'.format(i)
 
 
 def make_range_pattern(blocks):
