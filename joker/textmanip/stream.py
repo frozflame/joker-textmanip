@@ -71,19 +71,16 @@ class AtomicTailer(object):
         https://github.com/six8/pytailer/issues/9
     """
 
-    def __init__(self, file, read_size=1024, interval=1.,
-                 linesep=None, timeout=60):
-
-        if isinstance(file, str):
-            self.file = open(file)
-        else:
-            self.file = file
-
-        self.read_size = read_size
+    def __init__(self, file, interval=1., linesep=None, timeout=60):
+        self.file = file
         self.start_pos = self.file.tell()
         self.interval = interval
         self.linesep = linesep or os.linesep
         self.timeout = timeout
+
+    @classmethod
+    def open(cls, path, *args, **kwargs):
+        return cls(open(path), *args, **kwargs)
 
     def __iter__(self):
         return self.follow()
