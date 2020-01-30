@@ -1,5 +1,6 @@
+joker
 joker-cast>=0.1.0
-joker-stream
+joker-stream>=0.4
 six
 pyyaml
 volkanic

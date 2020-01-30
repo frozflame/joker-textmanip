@@ -35,6 +35,7 @@ def iter_lines(path, *args, **kwargs):
 
 
 def nonblank_lines_of(path, *args, **kwargs):
+    # deprecated
     for line in iter_lines(path, *args, **kwargs):
         line = line.strip()
         if not line:

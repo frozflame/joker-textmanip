@@ -64,9 +64,9 @@ def pprint_list2d(_, args):
 
 def pprint_list(_, args):
     import pprint
-    from joker.textmanip.stream import nonblank_lines_of
-    lines = list(nonblank_lines_of(_chkargs(args)))
-    pprint.pprint(lines)
+    from joker.stream.shell import ShellStream
+    lines = ShellStream.open(_chkargs(args)).dense()
+    pprint.pprint(list(lines))
 
 
 def vprint_tab(_, args):
@@ -83,17 +83,18 @@ def total(_, args):
 
 def grep(_, args):
     import re
-    from joker.textmanip.stream import nonblank_lines_of
+    from joker.stream.shell import ShellStream
     try:
         pattern = args[0]
     except IndexError:
         return
     regex = re.compile(pattern)
     idx = 1 if regex.groups == 1 else 0
-    for line in nonblank_lines_of(_chkargs(args[1:])):
-        mat = regex.search(line)
-        if mat:
-            print(mat.group(idx))
+    with ShellStream.open(_chkargs(args[1:])) as sstm:
+        for line in sstm.dense():
+            mat = regex.search(line)
+            if mat:
+                print(mat.group(idx))
 
 
 def _newline_conv(path, nl, suffix):
