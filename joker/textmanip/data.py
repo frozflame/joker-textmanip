@@ -11,7 +11,6 @@ from joker.default import under_package_dir
 import joker.textmanip
 from joker.textmanip.tabular import nonblank_lines_of
 
-# const cache
 _const_cache = {}
 
 
@@ -28,7 +27,7 @@ def const_lookup(func):
 
 
 def _locate(name):
-    return under_package_dir(joker.textmanip, 'asset', name)
+    return under_package_dir(joker.textmanip, 'data', name)
 
 
 @const_getter
@@ -65,6 +64,6 @@ def get_all_encodings():
 
 @const_lookup
 def get_most_frequent_characters(lang='sc'):
-    path = 'asset/mfc-{}.txt'.format(lang)
+    path = 'data/mfc-{}.txt'.format(lang)
     path = under_package_dir(joker.textmanip, path)
     return ''.join(nonblank_lines_of(path))
