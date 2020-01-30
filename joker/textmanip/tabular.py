@@ -9,7 +9,7 @@ import pprint
 from joker.cast import numerify
 
 from joker.textmanip import align
-from joker.textmanip.stream import nonblank_lines_of
+from joker.stream.shell import ShellStream
 
 
 def _split2(s):
@@ -40,7 +40,7 @@ def text_to_list(lines):
     """Get a list of lists from lines of text"""
     if isinstance(lines, str):
         lines = lines.splitlines()
-    return [l.strip().split() for l in lines]
+    return [lx.strip().split() for lx in lines]
 
 
 def text_to_dict(lines, swap=False, ordered=False):
@@ -57,26 +57,29 @@ def text_to_dict(lines, swap=False, ordered=False):
 
 
 def textfile_numsum(path, printout=False):
-    rv = text_numsum(nonblank_lines_of(path))
-    if printout:
-        print(*rv)
-    return rv
+    with ShellStream.open(path) as sstm:
+        rv = text_numsum(sstm.dense())
+        if printout:
+            print(*rv)
+        return rv
 
 
 def textfile_to_list(path, printout=False):
     """Get a list of lists from a path to a text file"""
-    rv = text_to_list(nonblank_lines_of(path))
-    if printout:
-        pprint.pprint(rv)
-    return rv
+    with ShellStream.open(path) as sstm:
+        rv = text_to_list(sstm.dense())
+        if printout:
+            pprint.pprint(rv)
+        return rv
 
 
 def textfile_to_dict(path, swap=False, ordered=False, printout=False):
     """Get a dict from a path to a text file"""
-    rv = text_to_dict(nonblank_lines_of(path), swap=swap, ordered=ordered)
-    if printout:
-        pprint.pprint(rv, indent=4)
-    return rv
+    with ShellStream.open(path) as sstm:
+        rv = text_to_dict(sstm.dense(), swap=swap, ordered=ordered)
+        if printout:
+            pprint.pprint(rv, indent=4)
+        return rv
 
 
 def dataframe_to_dicts(df):

@@ -9,9 +9,13 @@ from joker.cast import cache_lookup
 from joker.default import under_package_dir
 
 import joker.textmanip
-from joker.textmanip.tabular import nonblank_lines_of
 
 _const_cache = {}
+
+
+def _read_lines(path):
+    lines = (lx.strip() for lx in open(path))
+    return [lx for lx in lines if lx]
 
 
 def const_getter(func):
@@ -34,7 +38,7 @@ def _locate(name):
 def get_unicode_blocks():
     path = _locate('unicode_blocks.txt')
     results = []
-    for line in nonblank_lines_of(path):
+    for line in _read_lines(path):
         head, tail, title = line.split(None, 2)
         head = int(head, base=0)
         tail = int(tail, base=0)
@@ -59,11 +63,11 @@ def blocks_to_name_tuple_map(blocks=None):
 
 @const_getter
 def get_all_encodings():
-    return list(nonblank_lines_of(_locate('encodings.txt')))
+    return _read_lines(_locate('encodings.txt'))
 
 
 @const_lookup
 def get_most_frequent_characters(lang='sc'):
     path = 'data/mfc-{}.txt'.format(lang)
     path = under_package_dir(joker.textmanip, path)
-    return ''.join(nonblank_lines_of(path))
+    return ''.join(_read_lines(path))
