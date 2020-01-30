@@ -53,7 +53,7 @@ def quote_lines(prog=None, args=None):
     aa('path', metavar='PATH', help='use - to read from STDIN')
     ns = pr.parse_args(args)
     with ShellStream.open(ns.path) as sstm:
-        for line in sstm.nonblank().quote(strip=True):
+        for line in sstm.dense().quote(strip=True):
             print(line)
 
 

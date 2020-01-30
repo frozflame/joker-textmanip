@@ -7,8 +7,10 @@ import base64
 import collections
 import re
 
+import six
 from joker.cast import namedtuple_to_dict
-from six.moves import urllib
+
+urllib = six.moves.urllib
 
 
 def url_to_filename(url):
