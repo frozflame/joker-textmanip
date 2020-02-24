@@ -46,83 +46,89 @@ def validate_ipv6_address(address):
 
 
 class URLMutable(object):
+    __slots__ = ['scheme', 'netloc', 'path', 'params', 'q', 'fragment']
+    _fields = ['scheme', 'netloc', 'path', 'params', 'query', 'fragment']
+
     def __init__(self, url):
-        p = urllib.parse.urlparse(url)
-        self._components = namedtuple_to_dict(p)
-        self._query = collections.OrderedDict()
-        self._update_query()
+        pr = urllib.parse.urlparse(url)
+        self.scheme = pr.scheme
+        self.netloc = pr.netloc
+        self.path = pr.path
+        self.params = pr.params
+        self.fragment = pr.fragment
+        qsl = urllib.parse.parse_qsl(pr.query)
+        self.q = collections.OrderedDict(qsl)
 
     @property
     def query(self):
-        return self._query
+        return urllib.parse.urlencode(self.q)
 
     @query.setter
     def query(self, value):
-        self._query = collections.OrderedDict(value)
-
-    def _update_compoent(self):
-        qs = urllib.parse.urlencode(self._query)
-        self._components['query'] = qs
-
-    def _update_query(self):
-        q = urllib.parse.parse_qsl(self._components['query'])
-        self._query = collections.OrderedDict(q)
+        qsl = urllib.parse.parse_qsl(value)
+        self.q = collections.OrderedDict(qsl)
 
     def __getitem__(self, key):
-        self._update_compoent()
-        return self._components[key]
+        if key in self._fields:
+            return getattr(self, key)
+        raise KeyError(str(key))
 
     def __setitem__(self, key, value):
-        if key not in self._components:
-            raise KeyError('invalid URL component "{}"'.format(key))
-        self._components[key] = value
-        if key == 'query':
-            self._update_query()
+        if key in self._fields:
+            return setattr(self, key, value)
 
     def __str__(self):
-        self._update_compoent()
-        return urllib.parse.urlunparse(self._components.values())
+        values = [getattr(self, k) for k in self._fields]
+        return urllib.parse.urlunparse(values)
 
     def __repr__(self):
         cn = self.__class__.__name__
         return '{}({})'.format(cn, repr(str(self)))
 
-    def embed_link(self, key, guest_url, func=None):
+    def embed_link(self, key, guest_url, safe=True, func=None):
         """
-        :param guest_url:
         :param key:
+        :param guest_url:
+        :param safe: avoid chaining embedment
         :param func: process resulting base64 string with this func
         :return: a LinkMutable instance
         """
         # firstly, remove that key in guest_url!
-        guest_mutlink = URLMutable(guest_url)
-        guest_mutlink.query.pop(key, 0)
-        guest = base64.urlsafe_b64encode(str(guest_mutlink).encode('utf-8'))
+        if safe:
+            guest_urlmut = URLMutable(guest_url)
+            if key in guest_urlmut.q:
+                guest_urlmut.q.pop(key)
+                guest_url = str(guest_urlmut)
+
+        guest = base64.urlsafe_b64encode(guest_url.encode('utf-8'))
         guest = guest.decode('utf-8')
         guest = guest.replace('=', '').strip()
         if func:
             guest = func(guest)
-        self.query[key] = guest
+        self.q[key] = guest
 
     def unembed_link(self, key, func=None, remove=True):
-        em = self.query.get(key, '')
+        if key not in self.q:
+            return ''
+        if remove:
+            em = self.q.pop(key)
+        else:
+            em = self.q.get(key)
         if func:
             em = func(em)
         em += '=' * ((4 - len(em) % 4) % 4)
         em = em.encode('ascii')
         try:
-            url = base64.urlsafe_b64decode(em).decode('utf-8')
+            return base64.urlsafe_b64decode(em).decode('utf-8')
         except Exception:
             return ''
-        if remove:
-            self.query.pop(key, '')
-        return url
 
 
 def url_simplify(url, queries=('id',)):
     queries = set(queries)
     mut = URLMutable(url)
-    mut.query = {k: v for k, v in mut.query.items() if k in queries}
+    q = [kv for kv in mut.q.items() if kv[0] in queries]
+    mut.q = collections.OrderedDict(q)
     mut['fragment'] = ''
     return mut
 
