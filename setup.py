@@ -4,7 +4,7 @@
 import os
 import re
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 
 # import joker; exit(1)
@@ -44,23 +44,27 @@ config = {
     'author': 'frozflame',
     'author_email': 'frozflame@outlook.com',
     'license': "GNU General Public License (GPL)",
-    'packages': find_packages(),
+    'packages': find_namespace_packages(include='joker.*'),
     'namespace_packages': ["joker"],
     'zip_safe': False,
     'install_requires': read("requirements.txt"),
-    'entry_points': {'console_scripts': ['tman=joker.textmanip.main:registry']},
+    'entry_points': {
+        'console_scripts': ['tman = joker.textmanip.main:registry']
+    },
     'classifiers': [
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.0',
-        'Programming Language :: Python :: 3.1',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
     ],
 
     # ensure copy static file to runtime directory
