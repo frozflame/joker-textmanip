@@ -8,7 +8,6 @@ import collections
 import re
 
 import six
-from joker.cast import namedtuple_to_dict
 
 urllib = six.moves.urllib
 

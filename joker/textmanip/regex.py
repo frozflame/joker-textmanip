@@ -50,8 +50,8 @@ def _optchr(i):
 
 def make_range_pattern(blocks):
     """
-    >>> blocks = [(48, 50), 65]
-    >>> make_range_pattern(blocks)
+    >>> blks = [(48, 50), 65]
+    >>> make_range_pattern(blks)
     '0-2A'
     """
     parts = []

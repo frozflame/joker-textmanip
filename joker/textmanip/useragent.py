@@ -124,9 +124,9 @@ class UserAgent(object):
             # else:
             #     tokens[t] = version
             if comment:
-                yield (name, (version, comment))
+                yield name, (version, comment)
             else:
-                yield (name, version)
+                yield name, version
         # return tokens
 
     def is_ipad(self):
