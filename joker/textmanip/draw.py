@@ -16,7 +16,7 @@ def make_title_box(title, comment='#', width=50):
     lines.append('|{}|'.format(title.center(width)))
     lines.append('|{}|'.format(' ' * width))
     lines.append('+{}+'.format('-' * width))
-    return ['{} {}'.format(comment, l) for l in lines]
+    return ['{} {}'.format(comment, s) for s in lines]
 
 
 def mkbox(prog, args):
