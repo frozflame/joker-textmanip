@@ -200,3 +200,24 @@ def replace_small_chsi_with_decimal(s):
 def replace_small_decimal_with_chsi(s):
     regex = re.compile(r'\d+')
     return regex.sub(lambda m: integer_to_chsi(m.group()), s)
+
+
+def as_translation_table(func):
+    """ret.__getitem__ = func"""
+    attrs = {'__getitem__': staticmethod(func)}
+    return type('translation_table', tuple(), attrs)()
+
+
+@as_translation_table
+def to_halfwidth(ordinal):
+    ordinal -= 0xFEE0
+    if 32 < ordinal < 127:
+        return chr(ordinal)
+    raise LookupError
+
+
+@as_translation_table
+def to_fullwidth(ordinal):
+    if 32 < ordinal < 127:
+        return chr(ordinal + 0xFEE0)
+    raise LookupError
