@@ -127,7 +127,7 @@ entries = {
     'joker.textmanip.draw:mkbox': 'box',
 }
 
-registry = CommandRegistry(entries)
+registry = CommandRegistry.from_entries(entries)
 
 if __name__ == '__main__':
     registry()
