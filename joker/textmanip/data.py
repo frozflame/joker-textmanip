@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 
 import functools
+import re
 
 from joker.cast import cache_lookup
 from joker.default import under_package_dir
@@ -46,10 +47,9 @@ def get_unicode_blocks():
 
 
 def search_unicode_blocks(pattern):
-    import re
     regex = re.compile(pattern)
     blocks = []
-    for tup in get_unicode_blocks:
+    for tup in get_unicode_blocks():
         if regex.search(tup[2]):
             blocks.append(tup)
     return blocks
