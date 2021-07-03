@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-# __version__ = '0.3'
+__version__ = '0.3'
+
+if __name__ == '__main__':
+    print(__version__)
 
 b32_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
 b64_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
