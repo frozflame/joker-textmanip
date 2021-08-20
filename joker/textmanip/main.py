@@ -5,7 +5,7 @@ import argparse
 import sys
 from pprint import pprint
 
-from volkanic.system import CommandRegistry
+from volkanic.cmdline import CommandRegistry
 
 
 def _chkargs(args):

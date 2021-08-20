@@ -1,6 +1,5 @@
 joker
-joker-cast>=0.1.0
-joker-stream>=0.4
+joker-cast>=0.5.0
+joker-stream>=0.4.1
 six
-pyyaml
-volkanic
+volkanic>=0.3.6
