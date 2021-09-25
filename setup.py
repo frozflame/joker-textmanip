@@ -49,7 +49,7 @@ config = {
     'zip_safe': False,
     'install_requires': read("requirements.txt"),
     'entry_points': {
-        'console_scripts': ['tman = joker.textmanip.main:registry']
+        'console_scripts': ['tman = joker.textmanip.__main__:registry']
     },
     'classifiers': [
         'Programming Language :: Python',

@@ -7,7 +7,7 @@ import functools
 import re
 
 from joker.cast import cache_lookup
-from joker.default import under_package_dir
+from volkanic.utils import under_package_dir
 
 import joker.textmanip
 
