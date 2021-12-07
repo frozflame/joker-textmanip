@@ -3,14 +3,23 @@
 
 __version__ = '0.3.1'
 
-if __name__ == '__main__':
-    print(__version__)
+import os
 
 b32_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
 b64_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
 
 b64_urlsafe_chars = \
     'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'
+
+
+def random_hex(length=24):
+    size = sum(divmod(length, 2))
+    bs = os.urandom(size)
+    try:
+        return bs.hex()[:length]
+    except AttributeError:
+        import base64
+        return base64.b16encode(bs).decode('ascii')
 
 
 def random_string(length, chars=None):
@@ -72,3 +81,7 @@ def proper_join(parts):
         else:
             _parts.append(p + space)
     return ''.join(_parts)
+
+
+if __name__ == '__main__':
+    print(__version__)
