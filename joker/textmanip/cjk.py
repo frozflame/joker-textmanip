@@ -44,7 +44,7 @@ def remove_spaces_between_cjk(text):
 
 
 def _filter_encodings(s, func):
-    from joker.textmanip.data import get_all_encodings
+    from joker.textmanip.charset import get_all_encodings
     viable_encodings = list()
     for enc in get_all_encodings():
         try:
@@ -78,7 +78,7 @@ def _decode(text, dec):
 
 
 def brutal_cjk_decode(text, lang='sc'):
-    from joker.textmanip.data import (
+    from joker.textmanip.charset import (
         get_most_frequent_characters, get_all_encodings)
 
     available_encodings = get_all_encodings()
