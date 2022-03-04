@@ -11,6 +11,13 @@ from volkanic.utils import under_package_dir
 
 import joker.textmanip
 
+thin_space = '\u2009'
+zero_width_space = '\u200b'
+ideographic_space = '\u3000'
+
+# https://www.compart.com/en/unicode/block/U+2600
+_music_notes = '\u2669\u266a\u266b\u266c'
+
 _const_cache = {}
 
 

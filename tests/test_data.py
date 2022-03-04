@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-from __future__ import unicode_literals
-
-from joker.textmanip import data
+from joker.textmanip import charset
 
 
 def test():
     print(
-        data.get_all_encodings(),
-        data.get_most_frequent_characters(),
-        data.get_unicode_blocks(),
+        charset.get_all_encodings(),
+        charset.get_most_frequent_characters(),
+        charset.get_unicode_blocks(),
         sep='\n'
     )
 

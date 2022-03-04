@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-from __future__ import unicode_literals
-
 from joker.textmanip.cjk import (
     remove_cjk, remove_spaces_beside_cjk, remove_spaces_between_cjk, integer_to_chsi
 )

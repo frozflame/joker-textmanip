@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-from __future__ import division, unicode_literals
-
 import collections
 import re
 
@@ -112,7 +110,6 @@ def brutal_cjk_decode(text, lang='sc'):
 
 
 chsi_digits = '零一二三四五六七八九'
-
 chtr_digits = '零壹贰叁肆伍陆柒捌玖'
 
 punctuations = [

@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-from __future__ import unicode_literals
-
 import base64
 import collections
 import re
-
-import six
-
-urllib = six.moves.urllib
+import urllib.parse
 
 
 def url_to_filename(url):
