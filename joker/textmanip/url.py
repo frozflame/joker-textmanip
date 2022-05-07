@@ -3,7 +3,9 @@
 
 import base64
 import collections
+import dataclasses
 import re
+import typing
 import urllib.parse
 
 
@@ -37,6 +39,35 @@ def validate_ipv6_address(address):
     except socket.error:  # not a valid address
         return False
     return True
+
+
+@dataclasses.dataclass
+class _URLMutable:
+    _fields: typing.ClassVar = [
+        'scheme', 'netloc', 'path',
+        'params', 'query', 'fragment',
+    ]
+    scheme: str
+    netloc: str
+    path: str
+    params: str
+    query: dict
+    fragment: str
+
+    @classmethod
+    def parse(cls, url: str):
+        urlx = urllib.parse.urlparse(url)
+        kwargs = {k: getattr(urlx, k) for k in cls._fields}
+        query = dict(urllib.parse.parse_qsl(urlx.query))
+        kwargs['query'] = query
+        return cls(**kwargs)
+
+    def __str__(self):
+        dic = self.__dict__.copy()
+        query = {str(k): str(v) for k, v in self.query.items()}
+        dic['query'] = urllib.parse.urlencode(query)
+        parts = [dic.get(k) for k in self._fields]
+        return urllib.parse.urlunparse(parts)
 
 
 class URLMutable(object):
