@@ -11,33 +11,34 @@ from setuptools import setup, find_namespace_packages
 # DO NOT import your package from your setup.py
 
 
-package_name = "textmanip"
-
-
 def read(filename):
     with open(filename) as f:
         return f.read()
 
 
-def version_find():
-    root = os.path.dirname(__file__)
-    path = os.path.join(root, "joker/{}/__init__.py".format(package_name))
+def _under_parent_dir(ref_path, *paths):
+    parent_dir = os.path.dirname(ref_path)
+    return os.path.join(parent_dir, *paths)
+
+
+def find_version():
+    path = _under_parent_dir(__file__, 'joker/textmanip/__init__.py')
     regex = re.compile(
-        r"""^__version__\s*=\s*("|"|"{3}|"{3})([.\w]+)\1\s*(#|$)""")
+        r'''^__version__\s*=\s*('|"|'{3}|"{3})([.\w]+)\1\s*(#|$)''')
     with open(path) as fin:
         for line in fin:
             line = line.strip()
-            if not line or line.startswith("#"):
+            if not line or line.startswith('#'):
                 continue
             mat = regex.match(line)
             if mat:
                 return mat.groups()[1]
-    raise ValueError("__version__ definition not found")
+    raise ValueError('__version__ definition not found')
 
 
 config = {
     "name": "joker-textmanip",
-    "version": version_find(),
+    "version": find_version(),
     "description": "Text manipulation functions",
     "keywords": "joker text string",
     "url": "https://github.com/frozflame/joker-textmanip",
