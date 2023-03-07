@@ -9,6 +9,17 @@ import typing
 import urllib.parse
 
 
+def url_parse_qsd(url: str):
+    """
+    >>> url_parse_qsd('https://example.com/?q=1&q=2')
+    {'q': '2'}
+    >>> url_parse_qsd('https://example.com/')
+    {}
+    """
+    query = urllib.parse.urlparse(url).query
+    return dict(urllib.parse.parse_qsl(query))
+
+
 def url_to_filename(url):
     # http://stackoverflow.com/questions/295135/
     name = re.sub(r'[^\w\s_.-]+', '-', url)
