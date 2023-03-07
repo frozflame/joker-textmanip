@@ -1,6 +1,10 @@
 Changes of joker-textmanip
 ==========================
 
+### 0.4.1
+* add `url_parse_qsd()`
+* add some type annotations
+
 ### 0.3
 * add `__main__.py` (for `python -m joker.textmanip`)
 * remove `jt.url.LinkMutable` (use `jt.url.URLMutable`)

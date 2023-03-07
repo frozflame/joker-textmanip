@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 from typing import Iterable
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 b32_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
 b64_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
